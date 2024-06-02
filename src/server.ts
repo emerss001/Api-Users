@@ -14,15 +14,29 @@ interface User {
 app.post("/users", async (req: Request, res: Response) => {
     const newUser: User = req.body
 
-    await prisma.user.create({
-        data: {
-            name: newUser.name,
-            email: newUser.email,
-            age: newUser.age,
-        },
-    })
+    try {
+        await prisma.user.create({
+            data: {
+                name: newUser.name,
+                email: newUser.email,
+                age: newUser.age,
+            },
+        })
 
-    res.status(201).json(newUser)
+        res.status(201).json(newUser)
+    } catch (error) {
+        res.status(500).json({ error })
+    }
+})
+
+app.get("/users", async (req: Request, res: Response) => {
+    try {
+        const users = await prisma.user.findMany({})
+
+        res.status(200).json({ users })
+    } catch (error) {
+        res.status(500).json({ error })
+    }
 })
 
 app.listen(3000)
