@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client"
 import express, { Request, Response } from "express"
+import { where } from "./helpers/filter.js"
 
 const prisma = new PrismaClient()
 const app = express()
@@ -30,8 +31,22 @@ app.post("/users", async (req: Request, res: Response) => {
 })
 
 app.get("/users", async (req: Request, res: Response) => {
+    const { name, age } = req.query
+    let users: User[]
+
     try {
-        const users = await prisma.user.findMany({})
+        if (name || age) {
+            const whereClause = where(
+                name as string | undefined,
+                age ? Number(age) : undefined
+            )
+
+            users = await prisma.user.findMany({
+                where: whereClause,
+            })
+        } else {
+            users = await prisma.user.findMany({})
+        }
 
         res.status(200).json({ users })
     } catch (error) {
