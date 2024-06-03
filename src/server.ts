@@ -70,7 +70,7 @@ app.put("/users/:id", async (req: Request, res: Response) => {
             },
         })
 
-        res.status(201).send("ok")
+        res.status(201).json({ message: "ok" })
     } catch (error) {
         res.status(500).json({ error })
     }
@@ -86,7 +86,7 @@ app.delete("/users/:id", async (req: Request, res: Response) => {
             },
         })
 
-        res.status(200).send("ok")
+        res.status(200).json({ message: "ok" })
     } catch (error) {
         res.status(500).json({ error })
     }
