@@ -39,4 +39,26 @@ app.get("/users", async (req: Request, res: Response) => {
     }
 })
 
+app.put("/users/:id", async (req: Request, res: Response) => {
+    const userId = req.params.id
+    const newUser: User = req.body
+
+    try {
+        await prisma.user.update({
+            where: {
+                id: userId,
+            },
+            data: {
+                name: newUser.name,
+                email: newUser.email,
+                age: newUser.age,
+            },
+        })
+
+        res.status(200).send("ok")
+    } catch (error) {
+        res.status(500).json({ error })
+    }
+})
+
 app.listen(3000)
