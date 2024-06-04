@@ -1,10 +1,12 @@
 import { PrismaClient } from "@prisma/client"
 import express, { Request, Response } from "express"
 import { where } from "./helpers/filter.js"
+import cors from "cors"
 
 const prisma = new PrismaClient()
 const app = express()
 app.use(express.json())
+app.use(cors())
 
 interface User {
     name: string
